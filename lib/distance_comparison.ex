@@ -7,8 +7,6 @@ defmodule DistanceComparison do
 
   """
 
-  alias DistanceComparison.Paths
-
   @url "https://maps.googleapis.com/maps/api/distancematrix/json?"
 
   @doc """

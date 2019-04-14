@@ -1,4 +1,4 @@
-defmodule DistanceComparison.Paths do
+defmodule Paths do
 
   defstruct [:origin, :destination]
 
@@ -18,8 +18,8 @@ defmodule DistanceComparison.Paths do
   ## Example
 
       iex> Paths.new("Paris", ["Marseille", "Lyon"])
-      %DistanceComparison.Paths{destination: ["Marseille", "Lyon"], origin: "Paris"}
-      
+      %Paths{destination: ["Marseille", "Lyon"], origin: "Paris"}
+
   """
 
   def new(origins \\ [], destinations \\ []) when not is_nil(origins) and not is_nil(destinations) do
@@ -32,6 +32,10 @@ defmodule DistanceComparison.Paths do
 
   def add(prev_paths, orgs_or_dests \\ [])
 
+  def add(prev_paths, org_or_dest) when not is_list(org_or_dest) do
+    add(prev_paths, [org_or_dest])
+  end
+
   @doc """
   Adds a list of destinations to the Paths map destination list, only usable if origin
   is not a list.
@@ -42,10 +46,9 @@ defmodule DistanceComparison.Paths do
   ## Example
 
       iex> paths = Paths.new("Paris", ["Marseille", "Lyon"])
-      %DistanceComparison.Paths{destination: ["Marseille", "Lyon"], origin: "Paris"}
-
+      %Paths{destination: ["Marseille", "Lyon"], origin: "Paris"}
       iex> Paths.add(paths, ["Chantilly", "Nantes"])
-      %DistanceComparison.Paths{
+      %Paths{
         destination: ["Marseille", "Lyon", "Chantilly", "Nantes"],
         origin: "Paris"
       }
@@ -65,16 +68,14 @@ defmodule DistanceComparison.Paths do
   ## Example
 
       iex> paths = Paths.new(["Marseille", "Lyon"], "Paris")
-      %DistanceComparison.Paths{destination: "Paris", origin: ["Marseille", "Lyon"]}
-
+      %Paths{destination: "Paris", origin: ["Marseille", "Lyon"]}
       iex> Paths.add(paths, ["Chantilly", "Nantes"])
-      %DistanceComparison.Paths{
+      %Paths{
         destination: "Paris",
         origin: ["Marseille", "Lyon", "Chantilly", "Nantes"]
       }
 
   """
-
   def add(%__MODULE__{origin: org, destination: dest}, origins) when is_list(origins) and not is_list(dest) do
     %__MODULE__{origin: concat(org, origins), destination: dest}
   end
@@ -86,12 +87,12 @@ defmodule DistanceComparison.Paths do
   ## Example
 
     iex> paths1 = Paths.new(["Marseille", "Lyon"], "Paris")
-    %DistanceComparison.Paths{destination: "Paris", origin: ["Marseille", "Lyon"]}
+    %Paths{destination: "Paris", origin: ["Marseille", "Lyon"]}
     iex> Paths.to_params(paths1)
     %{destinations: "Paris", origins: "Marseille|Lyon"}
 
     iex> paths2 = Paths.new("Paris", ["Marseille", "Lyon"])
-    %DistanceComparison.Paths{destination: ["Marseille", "Lyon"], origin: "Paris"}
+    %Paths{destination: ["Marseille", "Lyon"], origin: "Paris"}
     iex> Paths.to_params(paths2)
     %{destinations: "Marseille|Lyon", origins: "Paris"}
 

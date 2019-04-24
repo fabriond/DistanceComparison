@@ -21,7 +21,6 @@ defmodule Paths do
       %Paths{destination: ["Marseille", "Lyon"], origin: "Paris"}
 
   """
-
   def new(origins \\ [], destinations \\ []) when not is_nil(origins) and not is_nil(destinations) do
     if not(is_list(origins) and is_list(destinations)) do
       %__MODULE__{origin: origins, destination: destinations}
@@ -103,6 +102,8 @@ defmodule Paths do
         %{origins: Enum.join(paths.origin, @sep), destinations: paths.destination}
       is_list(paths.destination) ->
         %{origins: paths.origin, destinations: Enum.join(paths.destination, @sep)}
+      true ->
+        raise ArgumentError, "Paths map has no list of origins or destinations"
     end
   end
 
